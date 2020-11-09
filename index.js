@@ -2,8 +2,10 @@ const express = require('express')
 const cors = require('cors')
 const bodyPs = require('body-parser')
 const mysql = require('mysql2')
+require('dotenv').config()
 const gpsin = require('./gpsin')
 const logbook = require('./logbook')
+const db_config = require('./db_config')
 
 app = express()
 app.use(cors())
@@ -11,7 +13,7 @@ app.use(bodyPs.json())
 
 app.use('/gps', gpsin)
 app.use('/logbook', logbook)
-const conn = mysql.createConnection('mysql://root@localhost:3306/boatapp')
+const conn = mysql.createConnection(db_config)
 
 app.get('/',  (req,res)=>{
     res.send({status:"ack"})

@@ -1,7 +1,8 @@
 const Router = require('express').Router()
 const mysql = require('mysql2')
 const { v4: uuidv4 } = require('uuid');
-const conn = mysql.createConnection('mysql://root@localhost:3306/boatapp')
+const db_config = require('./db_config')
+const conn = mysql.createConnection(db_config)
 
 Router.get('/',(req,res)=>{
     conn.query('SELECT * FROM logbook',(err,result,fi)=>{
