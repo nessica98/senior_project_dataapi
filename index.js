@@ -6,6 +6,7 @@ require('dotenv').config()
 const gpsin = require('./gpsin')
 const logbook = require('./logbook')
 const db_config = require('./db_config')
+const authen = require('./authen')
 
 app = express()
 app.use(cors())
@@ -13,6 +14,7 @@ app.use(bodyPs.json())
 
 app.use('/gps', gpsin)
 app.use('/logbook', logbook)
+app.use('/authen', authen)
 const conn = mysql.createConnection(db_config)
 
 app.get('/',  (req,res)=>{
