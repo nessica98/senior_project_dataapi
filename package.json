@@ -9,9 +9,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@turf/distance": "^6.0.1",
+    "@turf/helpers": "^6.1.4",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "mysql2": "^2.2.5",
-    "sequelize": "^6.3.5"
+    "request": "^2.88.2",
+    "sequelize": "^6.3.5",
+    "turf": "^3.0.14"
   }
 }

@@ -1,5 +1,7 @@
 const router = require('express').Router()
 const db = require('./models')
+const request = require('request')
+const findstop_fn = require('./findstop.func')
 const sequelize = db.sequelize
 const NodeGPS = db.nodegpsdata
 
@@ -44,11 +46,11 @@ router.get('/stop-point/:name',(req,res)=>{
     const isAll = false
     const {startDate,stopDate} = req.body
     if(startDate&&stopDate) isAll = true;
-    if(isAll){
-
-    }else{
-        
-    }
+    NodeGPS.findAll().then((val)=>{
+        const stop_pointResult = findstop_fn(val)
+        res.send(stop_pointResult)
+    })
+    
 })
 
 module.exports = router
