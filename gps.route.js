@@ -4,7 +4,16 @@ const request = require('request')
 const findstop_fn = require('./findstop.func')
 const sequelize = db.sequelize
 const NodeGPS = db.nodegpsdata
+const NodeData = db.nodedata
 
+router.get('/allnode', (req,res)=>{
+    NodeData.findAll().then((result)=>{
+        console.log(result)
+        res.send(result)
+    }).catch((reason)=>{
+        
+    })
+})
 router.get('/node/:nodeName',(req,res)=>{
     const {nodeName} = req.params
     NodeGPS.findAll({where:{nodeName:nodeName}}).then((result)=>{

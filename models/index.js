@@ -20,5 +20,9 @@ db.Sequelize = Sequelize
 db.sequelize = sequelize
 
 const nodeGPSdata = require('./nodegpsdata.model')
+const nodeData = require('./nodedata.model')
+const GatewayData = require('./gatewaydata.model')
 db.nodegpsdata = nodeGPSdata(sequelize,Sequelize)
+db.nodedata = nodeData(sequelize,Sequelize)
+db.GatewayData = GatewayData(sequelize,Sequelize)
 module.exports = db
