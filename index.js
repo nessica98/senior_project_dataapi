@@ -38,9 +38,10 @@ app.use('/gps', gpsRoute)
 if (app_mode === 'Server') {
   console.log('SERVER')
   app.use('/gateway', gatewayRoute)
+  app.use('/_bulk', bulkTxRoute)
 } else if (app_mode === 'Gateway') {
   console.log('GATEWAY')
-  app.use('/_bulk', bulkTxRoute)
+  
 }
 // set port, listen for requests
 const PORT = process.env.PORT || 5020;
