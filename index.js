@@ -27,6 +27,7 @@ const db = require('./models')
 const gpsRoute = require('./gps.route')
 
 const gatewayRoute = require('./gateway.route')
+const LogbookRoute = require('./logbook.route')
 const bulkTxRoute = require('./bulk.route')
 
 const sequelize = db.sequelize
@@ -35,6 +36,7 @@ sequelize.sync({ alter: true }).then((val) => {
   console.log('DB start run')
 })
 app.use('/gps', gpsRoute)
+app.use('/logbook', LogbookRoute)
 if (app_mode === 'Server') {
   console.log('SERVER')
   app.use('/gateway', gatewayRoute)
