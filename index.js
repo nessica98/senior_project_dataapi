@@ -6,6 +6,7 @@ const app_mode = process.env.APP_MODE
 
 const app = express();
 
+
 var corsOptions = {
   origin: "http://localhost:4200"
 };
@@ -17,6 +18,8 @@ app.use(bodyParser.json());
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
+
+
 
 // simple route
 app.get("/", (req, res) => {
@@ -40,6 +43,7 @@ if (app_mode === 'Server') {
   app.use('/gateway', gatewayRoute)
 } else if (app_mode === 'Gateway') {
   console.log('GATEWAY')
+  
   app.use('/_bulk', bulkTxRoute)
 }
 // set port, listen for requests

@@ -28,10 +28,10 @@ router.post('/post',async (req,res)=>{
         data = data.map((val)=>{
             return val.dataValues
         })
-        var moment_now = moment(last_update)
+        var moment_last = moment(last_update)
         data = data.filter((val,idx)=>{
             var moment_val = moment(val.updateTimestamp)
-            console.log(moment_now.diff(moment_val))
+            console.log(moment_last.diff(moment_val))
             return 1 === 1
         })
         console.log(data)
