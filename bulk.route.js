@@ -4,39 +4,28 @@ const db = require('./models')
 const GatewayData = db.GatewayData
 const nodeGPSdata = db.nodegpsdata
 
+// server listen : add to server db
 router.post('/post',async (req,res)=>{
-    const {gatewayId,last_update} = req.body
-    if(!(gatewayId && last_update)) {
+    const {gatewayId,last_update,payload} = req.body
+    if(!(gatewayId && last_update && payload)) {
         res.sendStatus(400);
         return;
     }
-    const gatewayData = await GatewayData.findAll({
-        where: {
-            gatewayId: gatewayId
-        }
-    })
-    console.log(gatewayData)
-    if(gatewayData.length < 1) {
-        res.status(404).send('Gateway not found!!')
+    if(!Array.isArray(payload)){
+        res.sendStatus(400)
         return;
     }
-    nodeGPSdata.findAll({
-        // where: {
-        //     updateTimestamp: {$between: [new Date(last_update),new Date(last_update)]}
-        // }
-    }).then((data)=>{
-        data = data.map((val)=>{
-            return val.dataValues
+    payload.forEach((val,idx)=>{
+        console.log('add to db', val)
+        var new_GPSrow = nodeGPSdata.build(val)
+        new_GPSrow.save().then((result)=>{
+            console.log(result)
+        }).catch((err)=>{
+            console.error(err)
         })
-        var moment_last = moment(last_update)
-        data = data.filter((val,idx)=>{
-            var moment_val = moment(val.updateTimestamp)
-            console.log(moment_last.diff(moment_val))
-            return 1 === 1
-        })
-        console.log(data)
-        res.send('get data from node')
     })
+
+    res.send('add to server DB')
 })
 
 module.exports = router

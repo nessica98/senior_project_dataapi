@@ -31,7 +31,7 @@ const stop_range_Arr = (result)=>{
     var isStopped = false
     var stop_init,stop_fin = 0
     for(var i = 0;i<distance_arr.length;i++){
-        if(distance_arr[i]<0.001){
+        if(distance_arr[i]<0.01){
             if(!isStopped) {
                 stop_init = i
             }
