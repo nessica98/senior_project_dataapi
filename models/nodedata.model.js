@@ -6,9 +6,6 @@ module.exports = (seq,Seq)=>{
         nodestartwork:{
             type: Seq.DATEONLY
         },
-        nodeowner:{
-            type: Seq.STRING
-        },
         nodeackupdate:{
             type: Seq.DATE
         },

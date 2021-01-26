@@ -23,10 +23,16 @@ const nodeGPSdata = require('./nodegpsdata.model')
 const nodeData = require('./nodedata.model')
 const GatewayData = require('./gatewaydata.model')
 const Logbooks = require('./logbook.model')
+const NodeOwner = require('./nodeowner.model')
 db.nodegpsdata = nodeGPSdata(sequelize,Sequelize)
 db.nodedata = nodeData(sequelize,Sequelize)
 db.GatewayData = GatewayData(sequelize,Sequelize)
+db.NodeOwner = NodeOwner(sequelize,Sequelize)
 const {LogbookListData,LogbookData} = Logbooks(sequelize,Sequelize)
 db.LogbookListData = LogbookListData;
-db.LogbookData = LogbookData
+db.LogbookData = LogbookData;
+db.NodeOwner.hasMany(db.nodedata, {as: 'nodelist'})
+db.nodedata.belongsTo(db.NodeOwner, {foreignKey: {
+  name: 'nodeOwnerId'
+}})
 module.exports = db
