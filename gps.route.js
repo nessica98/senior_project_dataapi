@@ -13,7 +13,8 @@ router.get('/allnode', (req,res)=>{
         console.log(result)
         res.send(result)
     }).catch((reason)=>{
-        
+        console.error(reason)
+        res.sendStatus(500)
     })
 })
 router.get('/node/:nodeName',(req,res)=>{
