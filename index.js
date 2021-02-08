@@ -24,7 +24,7 @@ app.use((req,res,next)=>{
 const db = require("./models")
 const sequelize = db.sequelize
 const NodeGPS = db.nodegpsdata
-sequelize.sync({ force:true }).then((val) => {
+sequelize.sync({ force:false,alter:true }).then((val) => {
   console.log('DB start run')
 })
 // simple route

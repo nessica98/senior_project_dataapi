@@ -8,7 +8,7 @@ router.get("/", (req, res) => {
   });
   
 const gpsRoute = require('./gps.route')
-  
+const nodeRoute = require('./node.route')
 const gatewayRoute = require('./gateway.route')
 const LogbookRoute = require('./logbook.route')
 const bulkTxRoute = require('./bulk.route')
@@ -22,6 +22,7 @@ if (app_mode === 'Server') {
     router.use('/_bulk', bulkTxRoute)
 } else if (app_mode === 'Gateway') {
    router.use('/authen',authRoute)
+   router.use('/node', nodeRoute)
    console.log('GATEWAY')
     
 }

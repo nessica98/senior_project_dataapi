@@ -5,7 +5,8 @@ module.exports = (seq,Seq) => {
             primaryKey: true
         },
         NodeOwnerName : {
-            type: Seq.STRING
+            type: Seq.STRING,
+            unique: true
         },
         NodeOwnerKeyHd5 : {
             type: Seq.STRING

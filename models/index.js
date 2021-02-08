@@ -11,8 +11,13 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
       min: dbConfig.pool.min,
       acquire: dbConfig.pool.acquire,
       idle: dbConfig.pool.idle
-    }
+    },
+    dialectOptions: {
+      useUTC: false, // for reading from database
+    },
+    timezone: '+07:00', // for writing to database
   });
+  //const sequelize = 
 
 const db = {}
 
@@ -35,4 +40,5 @@ db.NodeOwner.hasMany(db.nodedata, {as: 'nodelist'})
 db.nodedata.belongsTo(db.NodeOwner, {foreignKey: {
   name: 'nodeOwnerId'
 }})
+
 module.exports = db
