@@ -1,22 +1,33 @@
 {
-  "name": "restapiweb",
-  "version": "1.0.0",
+  "name": "backend_seniorproj",
+  "version": "2.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
+    "start:prod": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@turf/distance": "^6.0.1",
+    "@turf/helpers": "^6.1.4",
     "axios": "^0.21.0",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "crypto-js": "^4.0.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "gps-filter": "^0.2.0",
     "jsonwebtoken": "^8.5.1",
+    "kalman-filter": "^1.8.0",
+    "md5": "^2.3.0",
+    "moment": "^2.29.1",
     "mysql2": "^2.2.5",
-    "uuid": "^8.3.1"
+    "request": "^2.88.2",
+    "sequelize": "^6.3.5",
+    "turf": "^3.0.14",
+    "uuid": "^8.3.2"
   }
 }
