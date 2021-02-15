@@ -13,6 +13,6 @@ module.exports = (seq,Seq)=>{
             type: Seq.DATE
         }
     },{timestamps: false,createdAt: false})
-    NodeData.removeAttribute('id')
+    //NodeData.removeAttribute('id')
     return NodeData
 }
