@@ -16,15 +16,18 @@ const authRoute = require('./auth.route')
    
 router.use('/gps', gpsRoute)
 router.use('/logbook', LogbookRoute)
-if (app_mode === 'Server') {
-    console.log('SERVER')
-    router.use('/gateway', gatewayRoute)
-    router.use('/_bulk', bulkTxRoute)
-} else if (app_mode === 'Gateway') {
-   router.use('/authen',authRoute)
-   router.use('/node', nodeRoute)
-   console.log('GATEWAY')
+router.use('/authen', authRoute)
+router.use('/node', nodeRoute)
+
+// if (app_mode === 'Server') {
+//     console.log('SERVER')
+//     router.use('/gateway', gatewayRoute)
+//     router.use('/_bulk', bulkTxRoute)
+// } else if (app_mode === 'Gateway') {
+//    router.use('/authen',authRoute)
+//    router.use('/node', nodeRoute)
+//    console.log('GATEWAY')
     
-}
+// }
 
 module.exports = router

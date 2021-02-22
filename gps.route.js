@@ -6,10 +6,12 @@ const findstop_fn = require('./findstop.func')
 const sequelize = db.sequelize
 const NodeGPS = db.nodegpsdata
 const NodeData = db.nodedata
+const logging = require('./configs/logging')
 
 
 router.get('/allnode', (req,res)=>{
     NodeData.findAll().then((result)=>{
+
         console.log(result)
         res.send(result)
     }).catch((reason)=>{
@@ -20,10 +22,11 @@ router.get('/allnode', (req,res)=>{
 router.get('/node/:nodeName',(req,res)=>{
     const {nodeName} = req.params
     NodeGPS.findAll({where:{nodeName:nodeName}}).then((result)=>{
-        console.log(result)
+        //console.log(result)
+        logging.info(`get nodegps : ${result.length} records`)
         res.send(result)
     }).catch((reason)=>{
-        if(reason) console.error(reason)
+        if(reason) logging.error(reason)
         res.sendStatus(500)
     })
 })
@@ -47,6 +50,7 @@ router.get('/alldata/:nodename',(req,res)=>{
             //console.log(filt_array.length)
             res.send(filt_array)
         }else{
+            logging.info(`get nodegps data : ${result.length} records`)
             res.send(result)
         }
         
@@ -59,14 +63,17 @@ router.get('/alldata/:nodename',(req,res)=>{
 router.post('/gpsset',(req,res)=>{
     const {nodeName,nodeLAT,nodeLong,timeStamp} = req.body 
     if(!(nodeName&&nodeLAT&&nodeLong&&timeStamp)){
+        logging.error("Bad request")
         res.sendStatus(400)
         return
     }
     NodeGPS.build({nodeName:nodeName,nodeGPScoordinate:{ type: 'Point', coordinates: [nodeLAT,nodeLong]},updateTimestamp:timeStamp}).save()
     .then((val)=>{
+        logging.info("GPS add")
         res.send(val)
     }).catch((err)=>{
-        console.log(err)
+        //console.log(err)
+        logging.error("error occur :",err)
         res.sendStatus(500)
     })
 })
