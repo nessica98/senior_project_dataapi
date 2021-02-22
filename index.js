@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const logging = require("./configs/logging")
 require('dotenv').config()
 
 const app = express()
@@ -21,14 +22,17 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use((req,res,next)=>{
-  console.log("Show origin",req.header('Origin'))
+  //console.log("Show origin",req.header('Origin'))
+  logging.debug("Show origin",req.header('Origin'))
   next()
 })
 const db = require("./models")
 const sequelize = db.sequelize
 const NodeGPS = db.nodegpsdata
 sequelize.sync({ force:false,alter:true }).then((val) => {
-  console.log('DB start run')
+  logging.info('DB start run')
+}).catch((reason)=>{
+  logging.error('Database error : ',reason)
 })
 // simple route
 app.get("/", (req, res) => {
@@ -41,5 +45,5 @@ app.use("/api", ApiRoute)
 // set port, listen for requests
 const PORT = process.env.PORT || 5020;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`);
+  logging.info(`Server is running on port ${PORT}.`);
 });
