@@ -1,5 +1,5 @@
 
-const db = require('./models')
+const db = require('../models')
 const request = require('request')
 const sequelize = db.Sequelize
 const { Op } = sequelize
