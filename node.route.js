@@ -7,6 +7,7 @@ const Request = require('request');
 const NodeData = db.nodedata
 const NodeOwner = db.NodeOwner
 const urlConfig = require('./configs/url.config')
+const logging = require('./configs/logging')
 
 router.post('/add', async (req,res)=>{
     const {nodename,node_startdate,nodeowner } = req.body
@@ -15,15 +16,25 @@ router.post('/add', async (req,res)=>{
         return
     }
     const ownerid = await NodeOwner.findOne({where: {NodeOwnerName:nodeowner},raw:true}, {attribute:['NodeOwnerId']})
-    console.log(ownerid.NodeOwnerId)
-    if(ownerid){
-        const newnode = {nodename:nodename,nodestartwork:new Date(node_startdate),nodeackupdate:new Date(),nodeupdate:new Date(),nodeownerNodeOwnerId:ownerid.NodeOwnerId,NodeOwnerId:ownerid}
+    //console.log(ownerid.NodeOwnerId)
+    logging.debug(ownerid.NodeOwnerId)
+    if(ownerid.NodeOwnerId){
+        const newnode = {nodename:nodename,node_startdate:new Date(node_startdate),nodeowner:nodeowner}
+        logging.debug(urlConfig.serverApiUrl)
         NodeData.create(newnode).then((result)=>{
-            Request.post(urlConfig.serverApiUrl+'/api/node/new', {body:newnode} , (err,resp,body)=>{
-                if(!err) console.log(body);
-                else console.log('error',resp)
-            })
-            res.send({addComplete:true,data:result})
+            console.log(result)
+            Request.post(urlConfig.serverApiUrl+'/api/node/add', {  headers: {'content-types' : 'application/json'},body:newnode,json:true}, (err,resp,body)=>{
+                if(err) {
+                    console.log('error',err); res.status(500).send({addComplete:true,addtoServerComplete:false}) ;
+                }else {
+                if(resp && resp.statusCode) logging.debug(`resp status ${resp.statusCode}`)
+                if(resp && resp.statusCode==200) {
+                    console.log(body); 
+                    res.send({addComplete:true,addtoServerComplete:true})
+                }
+                else {console.log('error',err); res.status(500).send({addComplete:true,addtoServerComplete:false,resp:resp.statusCode})}
+            }})
+            //res.send({addComplete:true,data:result})
         }).catch((reason)=>{
             console.log(reason)
             res.sendStatus(500)
@@ -41,7 +52,8 @@ router.post('/adduser', (req,res)=>{
         res.send({status:"add complete",data:result})
     }).catch((reason)=>{
         console.error(reason)
-        res.send({status:"error",reason:reason})
+        
+        res.status(500).send({status:"error",reason:reason})
     })
     
 })

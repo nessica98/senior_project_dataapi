@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const logging = require("./configs/logging")
 require('dotenv').config()
-const logging = require('./configs/logging')
+//const logging = require('./configs/logging')
 
 const app = express()
 
