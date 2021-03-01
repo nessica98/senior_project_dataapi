@@ -24,11 +24,14 @@ nest: true}).then((data)=>{
     console.log(data)
     console.log(typeof data)
     const http_data_payload = {gatewayId:'Hyojin', last_update:'2020-01-30 14:30:00', payload:data}
-    request.post('http://localhost:5020/api/_bulk/logbook-post',{json: http_data_payload}, (err,resp,body)=>{
+    request.post('http://localhost:6000/api/_bulk/logbook-post',{json: http_data_payload}, (err,resp,body)=>{
         if(err){ console.log(err); return}
         //console.log(resp)
         console.log(body)
     })
+}).catch((reason)=>{
+    logging.error('DB error')
+    process.exit()
 })
 var newdate = moment().add(30, 's');
 setInterval(()=>{
