@@ -1,7 +1,9 @@
 const { createLogger, format, transports } = require('winston');
-
+require('dotenv').config()
+const env = process.env.NODE_ENV || 'development';
+console.log(env)
 const logger = createLogger({
-  level: 'debug',
+  level: env === 'development' ? 'debug' : 'info',
   format: format.combine(
     format.colorize(),
     format.timestamp({

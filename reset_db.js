@@ -9,5 +9,5 @@ const authRoute = require('./auth.route')
 const sequelize = db.sequelize
 const NodeGPS = db.nodegpsdata
 sequelize.sync({ force:true }).then((val) => {
-  console.log('DB start run')
+  console.log('New DB ready')
 })

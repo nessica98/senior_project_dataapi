@@ -19,16 +19,28 @@ router.get('/allnode', (req,res)=>{
         res.sendStatus(500)
     })
 })
-router.get('/node/:nodeName',(req,res)=>{
-    const {nodeName} = req.params
-    NodeGPS.findAll({where:{nodeName:nodeName}}).then((result)=>{
+router.get('/node/:nodeId',(req,res)=>{
+    const {nodeId} = req.params
+    NodeData.findByPk(nodeId,{ raw: true }).then((result)=>{
+        logging.debug(result)
+        if(!result){
+            res.status(404).send({status:'node not found'})
+            return
+        }
+        const nodename = result.nodename
         //console.log(result)
-        logging.info(`get nodegps : ${result.length} records`)
-        res.send(result)
+        NodeGPS.findAll({where:{nodeId:nodeId}, raw:true}).then((result_gps)=>{
+            //console.log(result)
+            logging.info(`get nodegps : ${result_gps.length} records`)
+            res.send({nodeName:nodename, data:result_gps})
+        }).catch((reason)=>{
+            if(reason) logging.error(reason)
+            res.sendStatus(500)
+        })
     }).catch((reason)=>{
-        if(reason) logging.error(reason)
-        res.sendStatus(500)
+
     })
+    
 })
 
 router.get('/alldata/:nodename',(req,res)=>{
@@ -61,13 +73,13 @@ router.get('/alldata/:nodename',(req,res)=>{
 })
 
 router.post('/gpsset',(req,res)=>{
-    const {nodeName,nodeLAT,nodeLong,timeStamp} = req.body 
-    if(!(nodeName&&nodeLAT&&nodeLong&&timeStamp)){
+    const {nodeId,nodeLAT,nodeLong,timeStamp,rssi} = req.body 
+    if(!(nodeId&&nodeLAT&&nodeLong&&timeStamp)){
         logging.error("Bad request")
         res.sendStatus(400)
         return
     }
-    NodeGPS.build({nodeName:nodeName,nodeGPScoordinate:{ type: 'Point', coordinates: [nodeLAT,nodeLong]},updateTimestamp:timeStamp}).save()
+    NodeGPS.build({nodeId:nodeId,nodeGPScoordinate:{ type: 'Point', coordinates: [nodeLAT,nodeLong]},updateTimestamp:timeStamp,RSSI:rssi}).save()
     .then((val)=>{
         logging.info("GPS add")
         res.send(val)
