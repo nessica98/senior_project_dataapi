@@ -5,63 +5,81 @@ const request = require('request')
 const sequelize = db.sequelize
 const Sequelize = db.Sequelize
 const { Op } = Sequelize
-//const NodeGPS = db.nodegpsdata
-const LogbookData = db.LogbookData
-const LogbookListData = db.LogbookListData
+const GatewayData = db.GatewayData
+const NodeData = db.nodedata
+const NodeGPS = db.nodegpsdata
 
-logging.info('_AND ME')
-const startDate = new Date('30 May 2020')
-const where_condition =  {
-    createdAt:
-    {
-        [Op.lt]: new Date(),
-        [Op.gt]: startDate
+const update_function = require('./upload_fuction')
+
+
+//async function call
+mainFunc = async () => {
+    // try{
+    var gatewayData = await GatewayData.findOne({ where: { gatewayName: 'Yunseong' }, raw: true });
+    if (!gatewayData || !gatewayData.gatewayackUpdate) {
+        logging.error("no gateway data")
+        process.exit()
     }
+    logging.info(gatewayData.gatewayName)
+    update_function(gatewayData.gatewayackUpdate)
 
-};
-LogbookData.findAll({where: where_condition, include: [{ model: LogbookListData, as: 'lists' }], raw:true,
-nest: true}).then((data)=>{
-    console.log(data)
-    console.log(typeof data)
-    const http_data_payload = {gatewayId:'Hyojin', last_update:'2020-01-30 14:30:00', payload:data}
-    request.post('http://localhost:3001/api/_bulk/logbook-post',{json: http_data_payload}, (err,resp,body)=>{
-        if(err){ console.log(err); return}
-        //console.log(resp)
-        console.log(body)
-    })
-}).catch((reason)=>{
-    logging.error('DB error')
-    process.exit()
-})
-var newdate = moment().add(30, 's');
-setInterval(()=>{
-    // Get next latest update
-    
-    console.log(newdate.diff(moment(),'second'))
-    if(newdate.diff(moment(),'seconds')<5){
-        logging.info('_AND ME')
-        const startDate = new Date('30 May 2020')
-        const where_condition =  {
-            createdAt:
-            {
-                [Op.lt]: new Date(),
-                [Op.gt]: startDate
+
+    gatewayData = await GatewayData.findOne({ where: { gatewayName: 'Yunseong' }, raw: true });
+    if (!gatewayData || !gatewayData.gatewayackUpdate) {
+        logging.error("no gateway data")
+        process.exit()
+    }
+    var newdate = moment(gatewayData.gatewayackUpdate)
+    setInterval(async () => {
+        //console.log(newdate.diff(moment(),'second'))
+        if (newdate.diff(moment(), 'seconds') < 5) {
+            logging.info('_AND ME')
+            
+            gatewayData = await GatewayData.findOne({ where: { gatewayName: 'Yunseong' }, raw: true });
+            if (!gatewayData || !gatewayData.gatewayackUpdate) {
+                logging.error("no gateway data")
+                process.exit()
             }
 
-        };
-        LogbookData.findAll({where: where_condition, include: [{ model: LogbookListData, as: 'lists' }], raw:true,
-        nest: true}).then((data)=>{
-            console.log(data)
-            console.log(typeof data)
-            const http_data_payload = {gatewayId:'Junho', last_update:'2020-01-30 14:30:00', payload:data}
-            request.post('http://localhost:3001/api/_bulk/logbook-post',{json: http_data_payload}, (err,resp,body)=>{
-                if(err){ console.log(err); return}
-                //console.log(resp)
-                console.log(body)
-            })
-        })
-        newdate = moment().add(2,'m')
-    }else{
-        logging.debug('hey')
-    }
-}, 5000)
+            update_function(moment(gatewayData.gatewayackUpdate))
+            newdate = moment().add(2, 'm')
+        } else {
+            logging.debug('hey')
+        }
+        //update_function('2020-01-03 10:30:00')
+    }, 1000)
+}
+
+// catch {
+//     logging.error("database error")
+//     process.exit()
+// }
+//}
+mainFunc()
+//
+// GatewayData.findOne({ where: { gatewayName: 'Yunseong' } }).then((data)=>{
+//     if(!data) {
+//         logging.error("no gateway data")
+//         process.exit()
+//     }
+//     console.log(data)
+// }).catch((reason)=>{
+//     logging.error("database error")
+//     process.exit()
+// })
+
+// update_function('2020-01-03 10:30:00')
+// var newdate = moment().add(2, 'm');
+
+// setInterval(()=>{
+//     //console.log(newdate.diff(moment(),'second'))
+//     if(newdate.diff(moment(),'seconds')<5){
+//         logging.info('_AND ME')
+//         update_function('2020-01-03 10:30:00')
+//         newdate = moment().add(2,'m')
+//     }else{
+//         logging.debug('hey')
+//     }
+//     //update_function('2020-01-03 10:30:00')
+// },1000)
+

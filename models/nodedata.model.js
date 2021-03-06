@@ -3,6 +3,9 @@ module.exports = (seq,Seq)=>{
         nodename: {
             type: Seq.STRING
         },
+        nodeGServerId: {
+            type: Seq.INTEGER
+        },
         nodestartwork:{
             type: Seq.DATEONLY
         },
