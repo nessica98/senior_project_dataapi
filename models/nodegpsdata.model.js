@@ -12,7 +12,7 @@ module.exports = (seq,Seq)=>{
         RSSI:{
             type: Seq.INTEGER
         }
-    },{timestamps: false,createdAt: false})
+    },{timestamps: false,createdAt: true})
     NodeGPS.removeAttribute('id')
     return NodeGPS
 }
